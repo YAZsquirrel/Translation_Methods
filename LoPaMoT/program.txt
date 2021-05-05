@@ -1,0 +1,12 @@
+﻿void main(){ 
+
+int chislo = 5;
+
+float _plavayushyaya = 1.0;
+float uplyvayu_shyaya = .1234;
+
+float auf = ( _plavayushyaya * uplyvayu_shyaya ) ; 
+
+float ch1 = ch + 5 - ( 8 * auf ) * ( 123 + chislo - _plavayushyaya ) - uplyvayu_shyaya;
+
+}

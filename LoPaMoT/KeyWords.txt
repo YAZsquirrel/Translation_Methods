@@ -1,0 +1,4 @@
+﻿int
+char
+float
+void main(){
