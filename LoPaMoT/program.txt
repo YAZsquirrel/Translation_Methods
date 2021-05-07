@@ -1,12 +1,13 @@
 ﻿void main(){ 
+int a, b, c;
+int q w;
+int r, t, y = 1;
+int f, g, h 
+float chonibud;
+float 1;
+float;
 
-int chislo = 5;
-
-float _plavayushyaya = 1.0;
-float uplyvayu_shyaya = .1234;
-
-float auf = ( _plavayushyaya * uplyvayu_shyaya ) ; 
-
-float ch1 = ch + 5 - ( 8 * auf ) * ( 123 + chislo - _plavayushyaya ) - uplyvayu_shyaya;
+char j = 123 + 321;
+char j;
 
 }

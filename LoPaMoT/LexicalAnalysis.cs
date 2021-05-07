@@ -218,6 +218,7 @@ namespace Lab_1
                   if (letter != '\n' || name.Length > 0)
                   {
                      int[] token = GetToken(name, flag_constant);
+                     flag_constant = false;
                      if (token[1] != -1)
                      {
                         Tokens.Add(token);
@@ -243,15 +244,16 @@ namespace Lab_1
       private int[] GetToken(string name, bool flag)
       {
          int id = -1;
-
-         if (name.Length <= 2)
+         if (!flag)
          {
-            if ((id = Operations.SearchIdByName(name)) != -1) return new int[] { 0, id };
-            if ((id = Divisions.SearchIdByName(name)) != -1) return new int[] { 1, id };
+            if (name.Length <= 2)
+            {
+               if ((id = Operations.SearchIdByName(name)) != -1) return new int[] { 0, id };
+               if ((id = Divisions.SearchIdByName(name)) != -1) return new int[] { 1, id };
+            }
+
+            if ((id = KeyWords.SearchIdByName(name)) != -1) return new int[] { 2, id };
          }
-
-         if ((id = KeyWords.SearchIdByName(name)) != -1) return new int[] { 2, id };
-
          if (flag)
          {
             id = Constants.SearchIdByName(name); return new int[] { 3, id };

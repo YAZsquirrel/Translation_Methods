@@ -96,6 +96,14 @@ namespace Lab_1
          variable_table.TryGetValue(id, out ATTRIBUTS atr);
          return atr.type != null;
       }
+      
+      public bool HasValue(string id)
+      {
+         variable_table.TryGetValue(id, out ATTRIBUTS atr);
+         return atr.value;
+      }
+      
+
 
       // what_search определяет по каким атрибутам производить поиск.
       // Первый символ определяет искать ли по ATTRIBUTS.type (1 - искать; 0 - не искать)
