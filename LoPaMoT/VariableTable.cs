@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Lab_1
+namespace MT
 {
    class VariableTable
    {
-      struct ATTRIBUTS
+      public struct ATTRIBUTS
       {
          public string type { get; set; }     // Определяет тип идентификатора
          public bool value;      // Определяет имеет ли идентификатор значение
@@ -14,7 +14,7 @@ namespace Lab_1
       };
 
       // Словарь. Ключ - идентификатор. Значение - атрибуты
-      private readonly Dictionary<string, ATTRIBUTS> variable_table;
+      public readonly Dictionary<string, ATTRIBUTS> variable_table;
 
       public VariableTable()     // Создание переменной таблицы
       {
@@ -54,6 +54,15 @@ namespace Lab_1
             Console.WriteLine("Данного элемента нет в таблице");
             return false;
          }
+      }
+
+
+      public string GetTypeByName(string name)
+      {
+         if (SearchIsExist(name))
+            return variable_table[name].type;
+         else
+            return "Error!";
       }
 
       public bool SetValue(string id, bool _value)  // Запись имеет ли значение данный идентификатор

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 
-namespace Lab_1
+namespace MT
 {
    class SyntaxAnalysis
    {
@@ -14,11 +14,14 @@ namespace Lab_1
       VariableTable Constants;          // 3
       VariableTable Identificators;     // 4
       StreamWriter f;
+      StreamWriter f1;
+
       public SyntaxAnalysis(ConstantTable Operations, ConstantTable Divisions, ConstantTable KeyWords,
                      VariableTable Constants, VariableTable Identificators)
       {
          tokensAll = File.ReadAllText("C:\\Users\\pm82k\\source\\repos\\LoPaMoT\\LoPaMoT\\Tokenы.txt");
          f = new StreamWriter("C:\\Users\\pm82k\\source\\repos\\LoPaMoT\\LoPaMoT\\Errors.txt");
+         f1 = new StreamWriter("C:\\Users\\pm82k\\source\\repos\\LoPaMoT\\LoPaMoT\\OPZ.txt");
          this.Operations = Operations;
          this.Divisions = Divisions;
          this.KeyWords = KeyWords;
@@ -63,6 +66,7 @@ namespace Lab_1
             if (tokens[numToken] == "")     // Если нет токена
             {
                line++;
+               f1.WriteLine();
                continue;    // Переходим к следующему токену
             }
 
@@ -99,14 +103,6 @@ namespace Lab_1
                   WriteError(line, "Повторное обьявление программы");
                   continue;    // Переходим к следующему символу
                }
-
-               // ???
-               //if (Constants.SearchIsExist(token_s))    // Токен - константа?
-               //    isSemiNeeded = true;
-
-               // ???
-               //if (token_s == "(" || token_s == ")")    // Токен - скобочка?
-               //    isSemiNeeded = false;
 
 
                if (KeyWords.SearchIsExist(token_s))     // Токен - тип?
@@ -153,7 +149,7 @@ namespace Lab_1
                      opers.Pop();
                   }
                   while (pop_operations(opers) == 0) ; // Вывод стека операций
-                  Console.WriteLine();
+                  //Console.WriteLine();
                   if (!d_type) continue;
                }
 
@@ -284,11 +280,14 @@ namespace Lab_1
                   }
                }
             }
+
+
          }
          if (!end)
          {
             WriteError(line, "Требуется \"}\"");
          }
+         f1.Close();
          f.Close();
       }
 
@@ -301,21 +300,25 @@ namespace Lab_1
             return 2;
 
          string pop_token = GetToken(operations.Pop());
-         Console.Write(pop_token + " "); // postfix {OPS}
+         //Console.Write(pop_token + " "); // postfix {OPS}
+         f1.Write(pop_token + " ");
+
          return 0;   // Успешно вытолкнули элемент
       }
       int WritePostfix(int[] token, Stack<int[]> operations)
       {
          if (token[0] == 3)  // Если константа
          {
-            Console.Write(Constants.SearchNameById(token[1]) + " "); // postfix {CONST}    //
+            //Console.Write(Constants.SearchNameById(token[1]) + " "); // postfix {CONST}    //
+            f1.Write(Constants.SearchNameById(token[1]) + " ");
             return 3;
          }
 
          if (token[0] == 4)    // Если идентификатор
          {
             string id = Identificators.SearchNameById(token[1]);
-            Console.Write(id + " "); // postfix {ID}  //
+            //Console.Write(id + " "); // postfix {ID}  //
+            f1.Write(id + " ");
 
             if (!Identificators.HasType(id))    // Если без значения (ошибка)
                return 1;
@@ -415,7 +418,7 @@ namespace Lab_1
       }
       void WriteError(int numString, string ErrorMessage)
       {
-         f.WriteLine("\n(line " + numString.ToString() + "): \"" + ErrorMessage + "\"\n");
+         f.WriteLine("\n(line " + numString.ToString() + "): \"" + ErrorMessage + " \"\n");
       }
    }
 }

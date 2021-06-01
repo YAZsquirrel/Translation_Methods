@@ -1,13 +1,7 @@
 ﻿void main(){ 
-int a, b, c;
-int q w;
-int r, t, y = 1;
-int f, g, h 
-float chonibud;
-float 1;
-float;
-
-char j = 123 + 321;
-char j;
-
+int a, b; 
+char c;
+c = "1";
+b = c != "1" - 10;
+b = c == "1" + 10;
 }

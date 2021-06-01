@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 
-namespace Lab_1
+namespace MT
 {
    class Scanner
    {
@@ -14,6 +14,7 @@ namespace Lab_1
       VariableTable Identificators;
       bool flagBlockComment = false;
       string comment = "";
+      string typeconst = "";
       public Scanner(ConstantTable Operations, ConstantTable Divisions, ConstantTable KeyWords,
                      VariableTable Constants, VariableTable Identificators)
       {
@@ -37,6 +38,7 @@ namespace Lab_1
          List<int[]> Tokens = new List<int[]>();
          char openchar = ' ';
          bool wasPoint = false;
+         
          //bool flag_comment = false;
          bool flagLineComment = false;
 
@@ -50,16 +52,20 @@ namespace Lab_1
 
             if (Status == Statuses.ReadChar)
             {
-               if ("\'\"".Contains(letter) && name != "\\")
+               if ("\'\"".Contains(letter) && (name != "\'\\" || name != "\"\\"))
                {
-                  if (name.Length == 0 && letter == '\'')
+                  if (name.Length == 1 && letter == '\'')
                   {
                      Status = Statuses.Error;
                   }
                   else
                   {
-                     if (letter == openchar && (name.Length <= 1 || name.Length == 2 && name[0] == '\\'))
+                     if (letter == openchar && (name.Length <= 2 || name.Length == 3 && name[1] != '\\'))
+                     {
+                        typeconst = "char";
+                        name += letter;
                         Status = Statuses.End;
+                     }
                      else
                         Status = Statuses.Error;
                   }
@@ -98,6 +104,7 @@ namespace Lab_1
                      flag_constant = true;
                      Status = Statuses.ReadChar;
                      openchar = letter;
+                     name += letter;
                   }
                   else if (letter == ';' || letter == ',' || letter == '(' || letter == ')' || letter == '}')
                   {
@@ -154,7 +161,17 @@ namespace Lab_1
                   if (name == ".")
                      Status = Statuses.Error;
                   else
+                  {
+                     if (wasPoint)
+                     {
+                        typeconst = "float";
+                     }
+                     else
+                     {
+                        typeconst = "int";
+                     }
                      Status = Statuses.End;
+                  }
                }
                else
                {
@@ -201,14 +218,26 @@ namespace Lab_1
             if (Status == Statuses.ReadOperator)
             {
                name += letter;
-               if (name[0] != '!' && name.Length == 1)
+               if (name == "==")
+               { 
                   Status = Statuses.End;
+               }
                else
-               if (name.Length == 2)
-                  if (name == "!=")
+               {
+                  if (name[0] != '!' && name[0] != '=' && name.Length == 1)
                      Status = Statuses.End;
                   else
-                     Status = Statuses.Error;
+                  if (name.Length == 2)
+                     if (name == "!=")
+                        Status = Statuses.End;
+                     else if (name == "= ")
+                     {
+                        Status = Statuses.End;
+                        name = "=";
+                     }
+                     else
+                        Status = Statuses.Error;
+               }
             }
 
             if (Status == Statuses.End)
@@ -256,7 +285,9 @@ namespace Lab_1
          }
          if (flag)
          {
-            id = Constants.SearchIdByName(name); return new int[] { 3, id };
+            id = Constants.SearchIdByName(name);
+            Constants.SetType(name, typeconst);
+            return new int[] { 3, id };
          }
          else
          {
@@ -280,6 +311,7 @@ namespace Lab_1
             }
          }
          f.Close();
+
       }
 
       private void WriteTokens(List<int[]> Tokens)
